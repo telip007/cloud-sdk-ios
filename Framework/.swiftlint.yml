@@ -1,0 +1,55 @@
+opt_in_rules:
+    - closure_spacing
+    - switch_case_on_newline
+
+disabled_rules:
+    - identifier_name
+
+included:
+    - CloudSDK
+
+excluded:
+- CloudSDK/ThirdParty
+
+line_length: 180
+force_cast: warning
+force_try: warning
+
+function_body_length:
+    - 40 # warning
+    - 150 # error
+type_body_length:
+    - 300 # warning
+    - 650 # error
+
+identifier_name:
+    min_length:
+        warning: 2
+
+function_parameter_count:
+    - 6 # warning
+    - 10 # error
+
+file_length:
+    - 600
+    - 1200
+
+large_tuple:
+    - 2
+    - 6
+
+cyclomatic_complexity:
+    - 10
+    - 30
+
+type_name:
+    max_length:
+        warning: 45
+
+custom_rules:
+  vertical_whitespace_between_cases:
+    included: ".*.swift"
+    regex: '[^\n{][ \t]*\n[ \t]*(?:case[^\n]+|default):[ \t]*\n'
+    name: "Vertical Whitespace Between Cases"
+    message: "Include a vertical whitespace (empty line) between cases in switch statements."
+    severity: warning

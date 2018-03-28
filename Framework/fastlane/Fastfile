@@ -1,0 +1,31 @@
+default_platform :ios
+
+platform :ios do
+
+  desc 'Generating documentation'
+  lane :documentation do
+    jazzy(config: '.jazzy.yaml')
+  end
+
+  desc 'Building library'
+  lane :build_library do
+    Dir.chdir('..') do
+      carthage(
+          command: 'build',
+          no_skip_current: true,
+          cache_builds: true,
+          platform: 'iOS'
+      )
+      carthage(
+          frameworks: ['CloudSDK'],
+          output: 'CloudSDK.framework.zip',
+          command: 'archive'
+      )
+    end
+  end
+
+  desc 'Running Swiftlint'
+  lane :code_style do
+    swiftlint(config_file: '.swiftlint.yml')
+  end
+end

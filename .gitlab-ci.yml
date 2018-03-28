@@ -1,0 +1,44 @@
+# GitLab CI build configuration file
+
+stages:
+  - test
+  - documentation
+  - build
+
+before_script:
+  - eval $(ssh-agent -s)
+  - echo "$DEPLOY_KEY" > rsa.key
+  - chmod 600 rsa.key
+  - ssh-add -K rsa.key
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - cd Framework # Change into Framework directory
+
+after_script:
+  - cd .. # Change back to root directory
+
+code_style:
+  stage: test
+  script:
+    - fastlane code_style
+  only:
+      - branches
+  except:
+      - master
+
+documentation:
+  stage: documentation
+  script:
+    - fastlane documentation
+    - cp -r images docs/images
+    - scp -r docs/* $DOCS_ROOT/docs/cloud-sdk/ios/
+  only:
+    - tags
+
+library:
+  stage: build
+  script:
+    - fastlane build_library
+    - scp ../CloudSDK.framework.zip $BINARY_ROOT/cloudkit/ios/library/CloudSDK.framework_$CI_BUILD_TAG.zip
+  only:
+    - tags
