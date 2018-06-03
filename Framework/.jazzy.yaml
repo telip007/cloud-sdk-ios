@@ -2,7 +2,7 @@ clean: true
 author: PACE Telematics GmbH
 author_url: https://www.pace.car
 copyright: PACE Telematics GmbH
-readme: README.md
+readme: ../README.md
 theme: fullwidth
 docset_path: docs
 source_directory: '.'
