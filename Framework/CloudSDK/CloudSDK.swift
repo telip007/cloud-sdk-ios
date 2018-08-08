@@ -23,7 +23,7 @@ public class PACECloudEnvironment {
     }
 
     /// production environment
-    public static let production = PACECloudEnvironment(baseUrl: "https://cloud.pace.car/", authenticationURL: "https://cockpit.pace.car/")
+    public static let production = PACECloudEnvironment(baseUrl: "https://api.pace.cloud/", authenticationURL: "https://id.pace.cloud/")
 }
 
 /// Authentication error object
