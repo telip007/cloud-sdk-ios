@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-Copyright © 2018 PACE Telematics GmbH
+Copyright (c) PACE Telematics GmbH
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
