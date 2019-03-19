@@ -9,6 +9,25 @@
 import Foundation
 
 class Keychain {
+    static let KEYCHAIN_DEVICE_UUID_KEY = "deviceUUID"
+    static var deviceUUID: String {
+        get {
+            if let uuid = KeychainSwift().get(KEYCHAIN_DEVICE_UUID_KEY), !uuid.isEmpty {
+                return uuid
+            } else {
+                // Generate new device uuid
+                let uuid = UUID().uuidString
+
+                KeychainSwift().set(uuid, forKey: KEYCHAIN_DEVICE_UUID_KEY, withAccess: .accessibleAlways)
+
+                return uuid
+            }
+        }
+        set {
+            KeychainSwift().set(newValue, forKey: KEYCHAIN_DEVICE_UUID_KEY, withAccess: .accessibleAlways)
+        }
+    }
+
     static let KEYCHAIN_USER_KEY = "cockpitAccount"
     static var userAuthToken: Session? {
         get {

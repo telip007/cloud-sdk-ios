@@ -9,6 +9,7 @@
 import Foundation
 import WebKit
 import SafariServices
+import CommonCrypto
 
 class OAuthManager: NSObject {
 
@@ -17,6 +18,10 @@ class OAuthManager: NSObject {
     let needsAuthentication: (AuthorizationWebViewController) -> Void
     let authenticated: (Session) -> Void
     let failure: (PACEAuthenticationError) -> Void
+
+    // PKCE
+    let codeChallengeMethod: String = "S256"
+    var codeVerifier: String = ""
 
     var isAuthenticated = false
 
@@ -37,6 +42,11 @@ class OAuthManager: NSObject {
     }
 
     func createSession() {
+        guard let codeChallenge = createCodeChallenge() else { fatalError("Couldn't create code challenge") }
+
+        authRequest.codeChallenge = codeChallenge
+        authRequest.codeVerifier = codeVerifier
+
         httpRequest.perform(path: "oauth2/authorize?\(buildUrlParams(from: authRequest.authorizationParams))", method: .get) { (_, response, error) in
             DispatchQueue.main.async {
                 self.handle(authorizationResponse: response, error: error)
@@ -46,7 +56,7 @@ class OAuthManager: NSObject {
 
     private func buildUrlParams(from urlParams: [String: String]) -> String {
         return urlParams
-            .map { $0.key + "=" + $0.value }
+            .map { $0.key + "=" + ($0.value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") }
             .joined(separator: "&")
     }
 
@@ -93,6 +103,8 @@ class OAuthManager: NSObject {
     private func didAuthenticate(_ code: String) {
         var body = authRequest.accessTokenParams
         body["code"] = code
+        body["code_verifier"] = codeVerifier
+
         let data = try? JSONEncoder().encode(body)
 
         httpRequest.perform(path: "oauth2/token", method: .post(data)) { (data, response, error) in
@@ -112,11 +124,9 @@ class OAuthManager: NSObject {
             self.authenticated(session)
         }
     }
-
 }
 
 extension OAuthManager: WebViewControllerDelegate {
-
     func decidePolicy(for navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let url = navigationAction.request.url, isRedirectUrl(url) else {
             decisionHandler(.allow)
@@ -138,11 +148,9 @@ extension OAuthManager: WebViewControllerDelegate {
             self.failure(.cancelled)
         }
     }
-
 }
 
 extension OAuthManager: HTTPRequestRedirectionDelegate {
-
     func willPerformHTTPRedirection(response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         guard let url = request.url, isRedirectUrl(url) else {
             completionHandler(request)
@@ -160,5 +168,42 @@ extension OAuthManager: HTTPRequestRedirectionDelegate {
             completionHandler(nil)
         }
     }
+}
 
+// MARK: - PKCE addition
+extension OAuthManager {
+    func createCodeVerifier() -> String {
+        var buffer = [UInt8](repeating: 0, count: 64)
+        _ = SecRandomCopyBytes(kSecRandomDefault, buffer.count, &buffer)
+
+        let verifier = Data(bytes: buffer).base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+            .trimmingCharacters(in: .whitespaces)
+
+        return verifier
+    }
+
+    func createCodeChallenge() -> String? {
+        let verifier = createCodeVerifier()
+        codeVerifier = verifier
+
+        guard let data = verifier.data(using: .utf8) else { return nil }
+
+        var buffer = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+
+        data.withUnsafeBytes {
+            _ = CC_SHA256($0, CC_LONG(data.count), &buffer)
+        }
+
+        let hash = Data(bytes: buffer)
+        let challenge = hash.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+            .trimmingCharacters(in: .whitespaces)
+
+        return challenge
+    }
 }

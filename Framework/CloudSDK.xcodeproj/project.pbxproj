@@ -14,12 +14,13 @@
 		4211F0F8206CD59F00635370 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211F0F7206CD59F00635370 /* User.swift */; };
 		4211F0FA206CE06900635370 /* RequestQueueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4211F0F9206CE06900635370 /* RequestQueueItem.swift */; };
 		4216A172206BC43B004AE0FB /* CloudSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 4216A170206BC43B004AE0FB /* CloudSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4216A199206BC4CE004AE0FB /* AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4216A196206BC4CE004AE0FB /* AuthorizationRequest.swift */; };
 		4216A19B206BC4CE004AE0FB /* AuthorizationWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4216A198206BC4CE004AE0FB /* AuthorizationWebViewController.swift */; };
 		4216A1A8206BC6AD004AE0FB /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4216A1A7206BC6AD004AE0FB /* Keychain.swift */; };
 		4216A1AB206BC7A4004AE0FB /* KeychainSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4216A1AA206BC7A4004AE0FB /* KeychainSwift.swift */; };
 		4219FC082089AAFB008519C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4219FC072089AAFB008519C7 /* Images.xcassets */; };
 		4219FC0A2089AB6B008519C7 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4219FC092089AB6B008519C7 /* WebViewController.swift */; };
+		9243E17D2211D15E00C400EB /* AuthorizationRequestProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243E17C2211D15E00C400EB /* AuthorizationRequestProtocol.swift */; };
+		9243E1812211E22800C400EB /* AuthorizationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9243E1802211E22800C400EB /* AuthorizationRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,13 +33,14 @@
 		4216A16D206BC43B004AE0FB /* CloudSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CloudSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4216A170206BC43B004AE0FB /* CloudSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CloudSDK.h; sourceTree = "<group>"; };
 		4216A171206BC43B004AE0FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4216A196206BC4CE004AE0FB /* AuthorizationRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationRequest.swift; sourceTree = "<group>"; };
 		4216A198206BC4CE004AE0FB /* AuthorizationWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationWebViewController.swift; sourceTree = "<group>"; };
 		4216A1A7206BC6AD004AE0FB /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		4216A1AA206BC7A4004AE0FB /* KeychainSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainSwift.swift; sourceTree = "<group>"; };
 		421794A220875AAD00EA76B1 /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		4219FC072089AAFB008519C7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4219FC092089AB6B008519C7 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		9243E17C2211D15E00C400EB /* AuthorizationRequestProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequestProtocol.swift; sourceTree = "<group>"; };
+		9243E1802211E22800C400EB /* AuthorizationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +73,7 @@
 		4216A16F206BC43B004AE0FB /* CloudSDK */ = {
 			isa = PBXGroup;
 			children = (
-				4216A196206BC4CE004AE0FB /* AuthorizationRequest.swift */,
+				9243E17B2211D12F00C400EB /* Requests */,
 				4216A198206BC4CE004AE0FB /* AuthorizationWebViewController.swift */,
 				4211F0F1206CAE6500635370 /* HTTPRequest.swift */,
 				4216A1A7206BC6AD004AE0FB /* Keychain.swift */,
@@ -96,6 +98,15 @@
 				4216A1AA206BC7A4004AE0FB /* KeychainSwift.swift */,
 			);
 			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		9243E17B2211D12F00C400EB /* Requests */ = {
+			isa = PBXGroup;
+			children = (
+				9243E1802211E22800C400EB /* AuthorizationRequest.swift */,
+				9243E17C2211D15E00C400EB /* AuthorizationRequestProtocol.swift */,
+			);
+			path = Requests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,14 +210,15 @@
 				4211F0F0206CAD5800635370 /* Session.swift in Sources */,
 				4219FC0A2089AB6B008519C7 /* WebViewController.swift in Sources */,
 				4216A1AB206BC7A4004AE0FB /* KeychainSwift.swift in Sources */,
+				9243E1812211E22800C400EB /* AuthorizationRequest.swift in Sources */,
 				4216A19B206BC4CE004AE0FB /* AuthorizationWebViewController.swift in Sources */,
 				4211F0F4206CB36D00635370 /* CloudSDK.swift in Sources */,
+				9243E17D2211D15E00C400EB /* AuthorizationRequestProtocol.swift in Sources */,
 				4211F0FA206CE06900635370 /* RequestQueueItem.swift in Sources */,
 				4216A1A8206BC6AD004AE0FB /* Keychain.swift in Sources */,
 				4211F0F8206CD59F00635370 /* User.swift in Sources */,
 				4211F0F2206CAE6500635370 /* HTTPRequest.swift in Sources */,
 				4211F0F6206CB8FC00635370 /* OAuthManager.swift in Sources */,
-				4216A199206BC4CE004AE0FB /* AuthorizationRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,6 +349,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;

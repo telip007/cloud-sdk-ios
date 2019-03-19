@@ -14,9 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        CloudSDK.instance.setup(environment: .production)
+        CloudSDK.shared.setup(environment: .development)
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = UINavigationController(rootViewController: ViewController())
@@ -48,4 +47,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
