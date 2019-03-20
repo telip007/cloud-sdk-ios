@@ -1,5 +1,7 @@
 ### Current master
 
-### V1.0
+### v2.0
+* Use PKCE extension for OAuth (#10) 
 
-- Initial release
+### v1.0
+* Initial release
