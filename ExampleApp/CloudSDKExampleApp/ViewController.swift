@@ -20,7 +20,7 @@ class ViewController: UITableViewController {
         tableView.tableFooterView = UIView()
         tableView.allowsSelection = false
 
-        CloudSDK.instance.hasValidSession { hasValidSession in
+        CloudSDK.shared.hasValidSession { hasValidSession in
             if hasValidSession {
                 self.showLoggedInState()
             } else {
@@ -43,7 +43,7 @@ class ViewController: UITableViewController {
     }
 
     @objc private func logout() {
-        CloudSDK.instance.logout()
+        CloudSDK.shared.logout()
         self.showLoggedOutState()
     }
 
@@ -52,12 +52,12 @@ class ViewController: UITableViewController {
         spinner.startAnimating()
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
 
-        let request = AuthorizationRequest(clientId: "71b4694bfebda8def1bceafd0d6c736f404025a0c05f020769badc81a62b8363",
-                                           clientSecret: "2e83f0ba3542de6a4b50e9aa4d2c3040fe48fd0f36fb4c89dcac146ab798da97",
-                                           redirectUrl: "CloudSDK://oauth",
-                                           scope: "public_profile")
+        let request = AuthorizationRequest(clientId: "a5e07401cf3fe1de54587e06a7037956be168e5273b8d4233079d9cb155ee4f7",
+                                           clientSecret: "ba1d488447e8ee056d610b049ff3d6c078eeebd24889e40bdb2d23442b772cb1",
+                                           redirectUrl: "pacetest://oauth",
+                                           scope: "cockpit:*:* cloud:*:* poi:gas-stations:read")
 
-        CloudSDK.instance.createSession(for: request, needsAuthentication: { webview in
+        CloudSDK.shared.createSession(for: request, needsAuthentication: { webview in
             webview.tintColor = .black
             webview.barTintColor = .white
             self.webview = webview
@@ -73,6 +73,27 @@ class ViewController: UITableViewController {
         })
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if #available(iOS 10.0, *) {
+            retrieveAccessToken()
+        } else {
+            // Fallback on earlier versions
+        }
+    }
+
+    @available(iOS 10.0, *)
+    private func retrieveAccessToken() {
+        Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { _ in
+            CloudSDK.shared.getSessionToken { token in
+                guard let token = token else { return }
+
+                NSLog("Access token: \(token)")
+            }
+        }
+    }
+
     private func handleLoginError() {
         let alert = UIAlertController(title: "Error", message: "Login failed.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -80,11 +101,11 @@ class ViewController: UITableViewController {
     }
 
     private func getUserInfo() {
-        CloudSDK.instance.getUserInfo(completion: { user in
+        CloudSDK.shared.getUserInfo(completion: { user in
             DispatchQueue.main.async {
                 self.showUserData(user)
             }
-        }, failure: { (error, statusCode) in
+        }, failure: { (_, _) in
             DispatchQueue.main.async {
                 self.handleUserDataError()
             }
@@ -150,4 +171,3 @@ struct Row {
     let title: String
     let detail: String
 }
-

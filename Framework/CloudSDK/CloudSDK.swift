@@ -24,6 +24,8 @@ public class PACECloudEnvironment {
 
     /// production environment
     public static let production = PACECloudEnvironment(baseUrl: "https://api.pace.cloud/", authenticationURL: "https://id.pace.cloud/")
+
+    public static let development = PACECloudEnvironment(baseUrl: "https://api.pace.cloud/", authenticationURL: "https://cp-1-dev.pacelink.net/")
 }
 
 /// Authentication error object
@@ -42,7 +44,7 @@ public enum PACEAuthenticationError: Error {
 public class CloudSDK {
 
     /// Singleton instance of CloudSDK
-    public static let instance = CloudSDK()
+    public static let shared = CloudSDK()
 
     /// Current Cloud environment, default: .production
     public var environment: PACECloudEnvironment = .production {
@@ -64,7 +66,7 @@ public class CloudSDK {
     let httpRequest = HTTPRequest()
     var requestQueue = [RequestQueueItem]()
 
-    init() {
+    private init() {
         currentSession = Keychain.userAuthToken
     }
 
@@ -78,7 +80,6 @@ public class CloudSDK {
     }
 
     // MARK: - Session
-
     /**
      Request OAuth authorization for PACE
      - parameter authRequest: authorization information
@@ -92,14 +93,7 @@ public class CloudSDK {
                               failure: @escaping (PACEAuthenticationError) -> Void) {
         logout()
 
-        authManager = OAuthManager(authRequest: authRequest, needsAuthentication: needsAuthentication, authenticated: { session in
-            self.currentSession = session
-            authenticated()
-            self.authManager = nil
-        }, failure: { error in
-            failure(error)
-            self.authManager = nil
-        })
+        initializeAuthManager(authRequest, needsAuthentication, authenticated, failure)
 
         authManager?.createSession()
     }
@@ -110,6 +104,18 @@ public class CloudSDK {
         Keychain.userAuthToken = nil
         currentSession?.invalidate()
         currentSession = nil
+    }
+
+    private func initializeAuthManager(_ authRequest: AuthorizationRequest, _ needsAuthentication: @escaping (AuthorizationWebViewController) -> Void,
+                                       _ authenticated: @escaping () -> Void, _ failure: @escaping (PACEAuthenticationError) -> Void) {
+        authManager = OAuthManager(authRequest: authRequest, needsAuthentication: needsAuthentication, authenticated: { session in
+            self.currentSession = session
+            authenticated()
+            self.authManager = nil
+        }, failure: { error in
+            failure(error)
+            self.authManager = nil
+        })
     }
 
     /**
@@ -249,5 +255,4 @@ public class CloudSDK {
             completion(userResponse.user)
         }
     }
-
 }

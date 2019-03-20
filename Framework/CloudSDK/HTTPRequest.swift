@@ -95,5 +95,4 @@ extension HTTPRequest: URLSessionDataDelegate {
         }
         delegate.willPerformHTTPRedirection(response: response, newRequest: request, completionHandler: completionHandler)
     }
-
 }
