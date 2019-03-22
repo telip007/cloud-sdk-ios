@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 /// PACE Cloud Environment
 public class PACECloudEnvironment {
@@ -100,10 +101,25 @@ public class CloudSDK {
 
     /// Logout and destroy the current session
     public func logout() {
+        currentSession?.invalidate()
+
         Keychain.oAuthApplication = nil
         Keychain.userAuthToken = nil
-        currentSession?.invalidate()
         currentSession = nil
+
+        cleanupData()
+    }
+
+    private func cleanupData() {
+        DispatchQueue.main.async { // WKProcessPool must to accessed from the main thread
+            WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                records.forEach { record in
+                    WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                }
+            }
+
+            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        }
     }
 
     private func initializeAuthManager(_ authRequest: AuthorizationRequest, _ needsAuthentication: @escaping (AuthorizationWebViewController) -> Void,
@@ -139,7 +155,7 @@ public class CloudSDK {
      - parameter completion: contains short lived session token if it exists and is valid
      */
     public func getSessionToken(_ completion: @escaping(String?) -> Void) {
-        self.hasValidSession { hasValidSessionToken in
+        hasValidSession { hasValidSessionToken in
             if hasValidSessionToken {
                 completion(self.currentSession?.accessToken)
             } else {

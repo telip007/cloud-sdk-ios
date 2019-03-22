@@ -73,27 +73,6 @@ class ViewController: UITableViewController {
         })
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if #available(iOS 10.0, *) {
-            retrieveAccessToken()
-        } else {
-            // Fallback on earlier versions
-        }
-    }
-
-    @available(iOS 10.0, *)
-    private func retrieveAccessToken() {
-        Timer.scheduledTimer(withTimeInterval: 15, repeats: true) { _ in
-            CloudSDK.shared.getSessionToken { token in
-                guard let token = token else { return }
-
-                NSLog("Access token: \(token)")
-            }
-        }
-    }
-
     private func handleLoginError() {
         let alert = UIAlertController(title: "Error", message: "Login failed.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))

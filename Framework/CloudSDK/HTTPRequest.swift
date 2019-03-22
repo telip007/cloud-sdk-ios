@@ -37,7 +37,14 @@ class HTTPRequest: NSObject {
 
     override init() {
         super.init()
-        session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
+
+        // Set cookie policies.
+        let configuration = URLSessionConfiguration.default
+        configuration.httpCookieAcceptPolicy = .never
+        configuration.httpCookieStorage = HTTPCookieStorage.shared
+        configuration.httpShouldSetCookies = false
+
+        session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
     }
 
     func perform(path: String, method: HTTPMethod, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {

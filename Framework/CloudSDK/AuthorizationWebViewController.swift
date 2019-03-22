@@ -12,7 +12,6 @@ import WebKit
 /// View Controller for requesting the users authorization for OAuth
 public class AuthorizationWebViewController: UINavigationController {
     let url: URL
-    let cookie: String?
 
     /// Tint color for title label and buttons
     public var tintColor: UIColor? {
@@ -33,13 +32,12 @@ public class AuthorizationWebViewController: UINavigationController {
 
     private let webView = WebViewController()
 
-    init(url: URL, cookie: String?, delegate: WebViewControllerDelegate) {
+    init(url: URL, delegate: WebViewControllerDelegate) {
         self.url = url
-        self.cookie = cookie
         super.init(nibName: nil, bundle: nil)
-        self.webView.delegate = delegate
-        self.setViewControllers([webView], animated: false)
-        self.webView.title = "PACE"
+        webView.delegate = delegate
+        setViewControllers([webView], animated: false)
+        webView.title = "PACE"
     }
 
     /// :nodoc:
@@ -58,10 +56,7 @@ public class AuthorizationWebViewController: UINavigationController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        var request = URLRequest(url: url)
-        if let cookie = self.cookie {
-            request.setValue(cookie, forHTTPHeaderField: "Cookie")
-        }
+        let request = URLRequest(url: url)
 
         webView.load(request: request)
     }
