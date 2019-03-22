@@ -1,5 +1,10 @@
 ### Current master
 
-### V1.0
+### v2.1
+* Update cookie and token revocation handling (#11)
 
-- Initial release
+### v2.0
+* Use PKCE extension for OAuth (#10)
+
+### v1.0
+* Initial release
