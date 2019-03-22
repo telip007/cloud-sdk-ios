@@ -60,17 +60,26 @@ class Session: Codable {
         }
     }
 
-    func invalidate() {
+    func invalidate(completion: ((Bool) -> Void)? = nil) {
         guard let authRequest = Keychain.oAuthApplication else {
+            completion?(false)
             return
         }
 
         var body = [String: String]()
-        body["token"] = refreshToken
+        body["token"] = accessToken
         body["client_id"] = authRequest.clientId
         body["client_secret"] = authRequest.clientSecret
         let data = try? JSONEncoder().encode(body)
 
-        httpRequest.perform(path: "oauth2/revoke", method: .post(data)) { (_, _, _) in }
+        httpRequest.perform(path: "oauth2/revoke", method: .post(data)) { (_, response, _) in
+            guard let response = response as? HTTPURLResponse,
+                response.statusCode == 200 else {
+                    completion?(false)
+                    return
+            }
+
+            completion?(true)
+        }
     }
 }

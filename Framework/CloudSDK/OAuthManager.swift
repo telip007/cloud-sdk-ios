@@ -75,13 +75,7 @@ class OAuthManager: NSObject {
             return
         }
 
-        guard let authUrl = URL(string: HTTPRequest.authenticationURL + "oauth2/authorize?\(buildUrlParams(from: authRequest.authorizationParams))") else {
-            self.failure(.serverError(error))
-            return
-        }
-
-        let cookie = response.allHeaderFields["Set-Cookie"] as? String
-        self.needsAuthentication(AuthorizationWebViewController(url: authUrl, cookie: cookie, delegate: self))
+        self.needsAuthentication(AuthorizationWebViewController(url: url, delegate: self))
     }
 
     private func isRedirectUrl(_ url: URL) -> Bool {
