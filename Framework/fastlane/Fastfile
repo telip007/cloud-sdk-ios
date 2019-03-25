@@ -7,6 +7,18 @@ platform :ios do
     jazzy(config: '.jazzy.yaml')
   end
 
+  desc 'Build project'
+  lane :build_project do
+    Dir.chdir('..') do
+      carthage(
+          command: 'build',
+          no_skip_current: true,
+          cache_builds: true,
+          platform: 'iOS'
+      )
+    end
+  end
+
   desc 'Building library'
   lane :build_library do
     Dir.chdir('..') do
