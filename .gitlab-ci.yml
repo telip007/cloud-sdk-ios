@@ -2,16 +2,19 @@
 
 stages:
   - test
+  - review
   - documentation
   - build
 
 before_script:
-  - eval $(ssh-agent -s)
-  - echo "$DEPLOY_KEY" > rsa.key
-  - chmod 600 rsa.key
-  - ssh-add -K rsa.key
   - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - touch ~/.ssh/known_hosts
+  - ssh-keygen -F repo.pacelink.net > /dev/null || ssh-keyscan repo.pacelink.net >> ~/.ssh/known_hosts
+  - ssh-keygen -F docs.pacelink.net > /dev/null || ssh-keyscan docs.pacelink.net >> ~/.ssh/known_hosts
+  - ssh-keygen -F lab.jamit.de > /dev/null || ssh-keyscan lab.jamit.de >> ~/.ssh/known_hosts
+  - eval $(ssh-agent -s)
+  - ssh-add # Add default key to SSH agent
+  - rm -f tmpfile && echo "$SSH_PRIVATE_KEY_DEPLOYS" >tmpfile && chmod 600 tmpfile && ssh-add tmpfile && rm -f tmpfile
   - cd Framework # Change into Framework directory
 
 after_script:
@@ -25,6 +28,13 @@ code_style:
       - branches
   except:
       - master
+
+review:
+  stage: review
+  script:
+    - fastlane build_project
+  only:
+    - branches
 
 documentation:
   stage: documentation

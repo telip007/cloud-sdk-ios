@@ -1,4 +1,5 @@
 ### Current master
+* Update CI config (#13)
 
 ### v2.1
 * Update cookie and token revocation handling (#11)
