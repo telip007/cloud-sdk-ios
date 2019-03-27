@@ -62,7 +62,8 @@ class ViewController: UITableViewController {
             webview.barTintColor = .white
             self.webview = webview
             self.present(webview, animated: true, completion: nil)
-        }, authenticated: {
+        }, authenticated: { accessToken in
+            print("Access token: \(accessToken)")
             self.showLoggedInState()
             self.webview?.dismiss(animated: true) { self.webview = nil }
         }, failure: { error in

@@ -1,4 +1,5 @@
 ### Current master
+* Return access token in session creation handler (#14)
 * Update CI config (#13)
 
 ### v2.1

@@ -25,8 +25,6 @@ public class PACECloudEnvironment {
 
     /// production environment
     public static let production = PACECloudEnvironment(baseUrl: "https://api.pace.cloud/", authenticationURL: "https://id.pace.cloud/")
-
-    public static let development = PACECloudEnvironment(baseUrl: "https://api.pace.cloud/", authenticationURL: "https://cp-1-dev.pacelink.net/")
 }
 
 /// Authentication error object
@@ -85,12 +83,12 @@ public class CloudSDK {
      Request OAuth authorization for PACE
      - parameter authRequest: authorization information
      - parameter needsAuthentication: callback containing a AuthorizationWebViewController if the user needs to grant authorization, present this in your app
-     - parameter authenticated: user authenticated successfully
+     - parameter authenticated: user authenticated successfully, callback contains the session's access token
      - parameter failure: authentication failed
      */
     public func createSession(for authRequest: AuthorizationRequest,
                               needsAuthentication: @escaping (AuthorizationWebViewController) -> Void,
-                              authenticated: @escaping () -> Void,
+                              authenticated: @escaping (String) -> Void,
                               failure: @escaping (PACEAuthenticationError) -> Void) {
         logout()
 
@@ -123,10 +121,10 @@ public class CloudSDK {
     }
 
     private func initializeAuthManager(_ authRequest: AuthorizationRequest, _ needsAuthentication: @escaping (AuthorizationWebViewController) -> Void,
-                                       _ authenticated: @escaping () -> Void, _ failure: @escaping (PACEAuthenticationError) -> Void) {
+                                       _ authenticated: @escaping (String) -> Void, _ failure: @escaping (PACEAuthenticationError) -> Void) {
         authManager = OAuthManager(authRequest: authRequest, needsAuthentication: needsAuthentication, authenticated: { session in
             self.currentSession = session
-            authenticated()
+            authenticated(session.accessToken)
             self.authManager = nil
         }, failure: { error in
             failure(error)
@@ -225,9 +223,7 @@ public class CloudSDK {
             self.isRefreshingSession = true
             session.refresh { newSession in
                 DispatchQueue.main.async {
-                    if newSession != nil {
-                        self.currentSession = newSession
-                    }
+                    self.currentSession = newSession
                     self.isRefreshingSession = false
                     self.requestQueue.append(requestItem)
                     self.emptyRequestQueue()
