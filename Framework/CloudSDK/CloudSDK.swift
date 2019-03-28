@@ -56,7 +56,7 @@ public class CloudSDK {
     var currentSession: Session? {
         didSet {
             if currentSession != nil {
-                Keychain.userAuthToken = currentSession
+                Keychain.session = currentSession
             }
         }
     }
@@ -66,7 +66,7 @@ public class CloudSDK {
     var requestQueue = [RequestQueueItem]()
 
     private init() {
-        currentSession = Keychain.userAuthToken
+        currentSession = Keychain.session
     }
 
     /**
@@ -102,7 +102,7 @@ public class CloudSDK {
         currentSession?.invalidate()
 
         Keychain.oAuthApplication = nil
-        Keychain.userAuthToken = nil
+        Keychain.session = nil
         currentSession = nil
 
         cleanupData()

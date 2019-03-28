@@ -9,29 +9,10 @@
 import Foundation
 
 class Keychain {
-    static let KEYCHAIN_DEVICE_UUID_KEY = "deviceUUID"
-    static var deviceUUID: String {
+    static let sessionKey = "pace.car.cloudmobilesdk.oAuthSession"
+    static var session: Session? {
         get {
-            if let uuid = KeychainSwift().get(KEYCHAIN_DEVICE_UUID_KEY), !uuid.isEmpty {
-                return uuid
-            } else {
-                // Generate new device uuid
-                let uuid = UUID().uuidString
-
-                KeychainSwift().set(uuid, forKey: KEYCHAIN_DEVICE_UUID_KEY, withAccess: .accessibleAlways)
-
-                return uuid
-            }
-        }
-        set {
-            KeychainSwift().set(newValue, forKey: KEYCHAIN_DEVICE_UUID_KEY, withAccess: .accessibleAlways)
-        }
-    }
-
-    static let KEYCHAIN_USER_KEY = "cockpitAccount"
-    static var userAuthToken: Session? {
-        get {
-            guard let data = KeychainSwift().getData(KEYCHAIN_USER_KEY) else {
+            guard let data = KeychainSwift().getData(sessionKey) else {
                 return nil
             }
 
@@ -40,18 +21,18 @@ class Keychain {
         set {
             if let newValue = newValue {
                 if let data = try? JSONEncoder().encode(newValue) {
-                    KeychainSwift().set(data, forKey: KEYCHAIN_USER_KEY, withAccess: .accessibleAlways)
+                    KeychainSwift().set(data, forKey: sessionKey, withAccess: .accessibleAlways)
                 }
             } else {
-                KeychainSwift().delete(KEYCHAIN_USER_KEY)
+                KeychainSwift().delete(sessionKey)
             }
         }
     }
 
-    static let KEYCHAIN_APPLICATION_KEY = "oAuthApplication"
+    static let applicationKey = "pace.car.cloudmobilesdk.oAuthApplication"
     static var oAuthApplication: AuthorizationRequest? {
         get {
-            guard let data = KeychainSwift().getData(KEYCHAIN_APPLICATION_KEY) else {
+            guard let data = KeychainSwift().getData(applicationKey) else {
                 return nil
             }
 
@@ -60,10 +41,10 @@ class Keychain {
         set {
             if let newValue = newValue {
                 if let data = try? JSONEncoder().encode(newValue) {
-                    KeychainSwift().set(data, forKey: KEYCHAIN_APPLICATION_KEY, withAccess: .accessibleAlways)
+                    KeychainSwift().set(data, forKey: applicationKey, withAccess: .accessibleAlways)
                 }
             } else {
-                KeychainSwift().delete(KEYCHAIN_APPLICATION_KEY)
+                KeychainSwift().delete(applicationKey)
             }
         }
     }
