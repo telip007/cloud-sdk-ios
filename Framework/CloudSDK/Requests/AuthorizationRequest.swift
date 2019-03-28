@@ -11,7 +11,7 @@ public class AuthorizationRequest: AuthorizationRequestProtocol, Decodable {
     public var clientSecret: String
     public var redirectUrl: String
     public var scope: String
-    let deviceUUID: String = Keychain.deviceUUID
+    let deviceUUID: String
     let userAuthToken: String
     let responseType: String = "code"
     let codeChallengeMethod: String = "S256"
@@ -43,11 +43,12 @@ public class AuthorizationRequest: AuthorizationRequestProtocol, Decodable {
         ]
     }
 
-    public init(clientId: String, clientSecret: String, redirectUrl: String, scope: String, userAuthToken: String = "") {
+    public init(clientId: String, clientSecret: String, redirectUrl: String, scope: String, userAuthToken: String = "", deviceUUID: String = "") {
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
         self.scope = scope
         self.userAuthToken = userAuthToken
+        self.deviceUUID = deviceUUID
     }
 }
