@@ -69,7 +69,6 @@ class Session: Codable {
         var body = [String: String]()
         body["token"] = accessToken
         body["client_id"] = authRequest.clientId
-        body["client_secret"] = authRequest.clientSecret
         let data = try? JSONEncoder().encode(body)
 
         httpRequest.perform(path: "oauth2/revoke", method: .post(data)) { (_, response, _) in

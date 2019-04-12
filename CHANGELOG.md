@@ -1,4 +1,5 @@
 ### Current master
+* Remove client secret from requests (#17)
 * Add prefix to Keychain keys to prevent collision (#15)
 * Return access token in session creation handler (#14)
 * Update CI config (#13)
