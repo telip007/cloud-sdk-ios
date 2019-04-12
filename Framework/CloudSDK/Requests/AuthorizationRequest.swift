@@ -8,7 +8,6 @@
 
 public class AuthorizationRequest: AuthorizationRequestProtocol, Decodable {
     public var clientId: String
-    public var clientSecret: String
     public var redirectUrl: String
     public var scope: String
     let deviceUUID: String
@@ -38,14 +37,12 @@ public class AuthorizationRequest: AuthorizationRequestProtocol, Decodable {
             "grant_type": "authorization_code",
             "client_id": clientId,
             "redirect_uri": redirectUrl,
-            "client_secret": clientSecret,
             "code": code
         ]
     }
 
-    public init(clientId: String, clientSecret: String, redirectUrl: String, scope: String, userAuthToken: String = "", deviceUUID: String = "") {
+    public init(clientId: String, redirectUrl: String, scope: String, userAuthToken: String = "", deviceUUID: String = "") {
         self.clientId = clientId
-        self.clientSecret = clientSecret
         self.redirectUrl = redirectUrl
         self.scope = scope
         self.userAuthToken = userAuthToken

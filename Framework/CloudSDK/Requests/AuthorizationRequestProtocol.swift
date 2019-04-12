@@ -9,8 +9,6 @@
 public protocol AuthorizationRequestProtocol: Codable {
     /// client id
     var clientId: String { get }
-    /// client secret
-    var clientSecret: String { get }
     /// redirect url
     var redirectUrl: String { get }
     /// scopes
