@@ -35,6 +35,8 @@ review:
     - fastlane build_project
   only:
     - branches
+  tags:
+    - xcode-10.2
 
 documentation:
   stage: documentation
@@ -44,6 +46,8 @@ documentation:
     - scp -r docs/* $DOCS_ROOT/docs/cloud-sdk/ios/
   only:
     - tags
+  tags:
+    - xcode-10.2
 
 library:
   stage: build
@@ -52,3 +56,5 @@ library:
     - scp ../CloudSDK.framework.zip $BINARY_ROOT/cloudkit/ios/library/CloudSDK.framework_$CI_BUILD_TAG.zip
   only:
     - tags
+  tags:
+    - xcode-10.2
