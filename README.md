@@ -10,13 +10,11 @@ Link the CloudSDK.framework with your project as `Embedded Binary`.
 
 To authenticate with PACE via OAuth provide the following information to Cloud SDK:
 - clientId
-- clientSecret
 - redirectUrl
 - scope
 
 ```swift
 let authRequest = AuthorizationRequest(clientId: "ABC",
-                                       clientSecret: "XYZ",
                                        redirectUrl: "CloudSDK://oauth",
                                        scope: "read")
 

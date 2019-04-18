@@ -48,12 +48,11 @@ class ViewController: UITableViewController {
     }
 
     @objc private func login() {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let spinner = UIActivityIndicatorView(style: .gray)
         spinner.startAnimating()
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
 
         let request = AuthorizationRequest(clientId: "a5e07401cf3fe1de54587e06a7037956be168e5273b8d4233079d9cb155ee4f7",
-                                           clientSecret: "ba1d488447e8ee056d610b049ff3d6c078eeebd24889e40bdb2d23442b772cb1",
                                            redirectUrl: "pacetest://oauth",
                                            scope: "cockpit:*:* cloud:*:* poi:gas-stations:read")
 
@@ -131,7 +130,7 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") ?? UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "cell")
         let tableItem = tableItems[indexPath.section].rows[indexPath.row]
         cell.textLabel?.text = tableItem.title
         cell.textLabel?.textColor = .gray
