@@ -1,4 +1,6 @@
 ### Current master
+
+### v3.0
 * Migrate to Swift 5 (#18)
 * Remove client secret from requests (#17)
 * Add prefix to Keychain keys to prevent collision (#15)
