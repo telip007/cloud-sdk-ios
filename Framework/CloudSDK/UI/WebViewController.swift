@@ -9,8 +9,8 @@
 import UIKit
 import WebKit
 
-protocol WebViewControllerDelegate: class {
-    func decidePolicy(for navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void)
+public protocol WebViewControllerDelegate: class {
+    func decidePolicy(_ controller: UIViewController, for navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void)
     func cancel()
 }
 
@@ -25,7 +25,7 @@ class WebViewController: UIViewController {
         }
     }
 
-    let webView = WKWebView()
+    var webView: WKWebView!
     let toolBar = UIToolbar()
     private var progressView = UIProgressView()
     private var progressObservation: NSKeyValueObservation?
@@ -57,12 +57,17 @@ class WebViewController: UIViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        var safeAreaInsets = UIEdgeInsets.zero
+
+        if #available(iOS 11.0, *) {
+           safeAreaInsets = self.view.safeAreaInsets
+        }
 
         let toolBarHeight: CGFloat = 44
-        toolBar.frame = CGRect(x: 0, y: view.frame.height - toolBarHeight, width: view.frame.width, height: toolBarHeight)
+        toolBar.frame = CGRect(x: 0, y: view.frame.height - toolBarHeight - safeAreaInsets.bottom, width: view.frame.width, height: toolBarHeight)
 
-        let webViewHeight = view.frame.height - toolBarHeight
-        webView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: webViewHeight)
+        let webViewHeight = view.frame.height - toolBarHeight - safeAreaInsets.bottom  - safeAreaInsets.top
+        webView.frame = CGRect(x: 0, y: safeAreaInsets.top, width: view.frame.width, height: webViewHeight)
 
         if let navigationBar = navigationController?.navigationBar {
             progressView.frame = CGRect(x: 0,
@@ -80,6 +85,13 @@ class WebViewController: UIViewController {
     }
 
     private func addWebView() {
+        let configuration = WKWebViewConfiguration.init()
+
+        if #available(iOS 11.0, *) {
+            configuration.setURLSchemeHandler(self, forURLScheme: "paceapp")
+        }
+
+        webView = WKWebView(frame: CGRect.zero, configuration: configuration)
         webView.navigationDelegate = self
         webView.allowsBackForwardNavigationGestures = true
         webView.isMultipleTouchEnabled = true
@@ -192,6 +204,29 @@ extension WebViewController: WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        delegate?.decidePolicy(for: navigationAction, decisionHandler: decisionHandler)
+        if let delegate = delegate {
+            delegate.decidePolicy(self, for: navigationAction, decisionHandler: decisionHandler)
+        } else {
+            guard let url = navigationAction.request.url else {
+                decisionHandler(.allow)
+                return
+            }
+
+            if OAuthConnection.shared.open(url: url) {
+                decisionHandler(.cancel)
+            } else {
+                decisionHandler(.allow)
+            }
+        }
+    }
+}
+
+@available(iOS 11.0, *)
+extension WebViewController: WKURLSchemeHandler {
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) { }
+
+    func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
+        guard let url = urlSchemeTask.request.url else { return }
+        UIApplication.shared.open(url, options: [:]) { _ in }
     }
 }
