@@ -9,7 +9,7 @@ included:
     - CloudSDK
 
 excluded:
-- CloudSDK/ThirdParty
+    - CloudSDK/ThirdParty
 
 line_length: 180
 force_cast: warning

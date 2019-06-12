@@ -32,7 +32,7 @@ public class AuthorizationWebViewController: UINavigationController {
 
     private let webView = WebViewController()
 
-    init(url: URL, delegate: WebViewControllerDelegate) {
+    public init(url: URL, delegate: WebViewControllerDelegate?) {
         self.url = url
         super.init(nibName: nil, bundle: nil)
         webView.delegate = delegate

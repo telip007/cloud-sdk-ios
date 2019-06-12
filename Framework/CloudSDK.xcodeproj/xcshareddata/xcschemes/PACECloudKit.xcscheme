@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DCAD01AD2284137F007E9794"
+               BuildableName = "CloudSDKTests.xctest"
+               BlueprintName = "CloudSDKTests"
+               ReferencedContainer = "container:CloudSDK.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "4216A16C206BC43B004AE0FB"
+            BuildableName = "CloudSDK.framework"
+            BlueprintName = "CloudSDK"
+            ReferencedContainer = "container:CloudSDK.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
