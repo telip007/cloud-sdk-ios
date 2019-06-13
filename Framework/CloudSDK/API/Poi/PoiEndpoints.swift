@@ -16,27 +16,27 @@ public extension ApiRequest {
     class QueryLocationBasedAppsResponse: DataArrayContainer<FuelingAttributes, Void, Void, FuelingMeta> {}
 
     struct FuelingAttributes: Codable {
-        let appType: AppType?
-        let title: String?
-        let subtitle: String?
-        let logoUrl: String?
-        let pwaUrl: String?
-        let androidInstantAppUrl: String?
-        let cache: String?
-        let createdAt: String?
-        let updatedAt: String?
-        let deletedAt: String?
-        let references: [String]?
+        public let appType: AppType?
+        public let title: String?
+        public let subtitle: String?
+        public let logoUrl: String?
+        public let pwaUrl: String?
+        public let androidInstantAppUrl: String?
+        public let cache: String?
+        public let createdAt: String?
+        public let updatedAt: String?
+        public let deletedAt: String?
+        public let references: [String]?
     }
 
     struct FuelingMeta: Codable {
-        let insideAppArea: Bool
-        let appArea: AppAreaType
+        public let insideAppArea: Bool
+        public let appArea: AppAreaType
     }
 
     struct AppAreaType: Codable {
-        let type: String
-        let coordinates: [[Float]]
+        public let type: String
+        public let coordinates: [[Float]]
     }
 
     static func queryLocationBasedApps(host: String = Host.api.hostName,

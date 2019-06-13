@@ -54,11 +54,11 @@ public extension ApiRequest {
     }
 
     struct AddressAttributes: Codable {
-        let street: String
-        let houseNo: String
-        let postalCode: String
-        let city: String
-        let countryCode: String
+        public let street: String
+        public let houseNo: String
+        public let postalCode: String
+        public let city: String
+        public let countryCode: String
 
         public init(street: String, houseNo: String, postalCode: String, city: String, countryCode: String) {
             self.street = street
@@ -74,11 +74,11 @@ public extension ApiRequest {
     }
 
     struct PaymentTokenAttributes: Codable {
-        let amount: Float
-        let currency: String
-        let value: String
-        let validUntil: String
-        let purposePRNs: [String]
+        public let amount: Float
+        public let currency: String
+        public let value: String
+        public let validUntil: String
+        public let purposePRNs: [String]
     }
 
     /* Endpoints */
