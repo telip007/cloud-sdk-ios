@@ -70,7 +70,7 @@ public extension ApiRequest {
     }
 
     struct PaymentTokensRelationship: Codable {
-        let paymentTokens: DataArrayContainer<Void, Void, Void, Void>?
+        public let paymentTokens: DataArrayContainer<Void, Void, Void, Void>?
     }
 
     struct PaymentTokenAttributes: Codable {
