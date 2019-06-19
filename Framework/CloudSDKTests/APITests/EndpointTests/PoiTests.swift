@@ -49,6 +49,27 @@ class PoiTests: XCTestCase {
         ]
     }
     """
+    
+    let getAppsById200response: String = """
+    {
+      "data": {
+        "type": "locationBasedApp",
+        "id": "f106ac99-213c-4cf7-8c1b-1e841516026b",
+        "attributes": {
+          "appType": "fueling",
+          "title": "PACE Fueling App",
+          "subtitle": "Zahle bargeldlos mit der PACE Fueling App",
+          "logoUrl": "http://via.placeholder.com/200x200",
+          "pwaUrl": "https://cdn.example.org/pwa/fueling.html",
+          "androidInstantAppUrl": "https://cdn.example.org/pwa/fueling.apk",
+          "cache": "approaching",
+          "createdAt": "2018-01-01T00:00:00",
+          "updatedAt": "2018-06-01T00:00:00",
+          "deletedAt": "2018-12-01T00:00:00"
+        }
+      }
+    }
+    """
 
     func testValidResponseWithApps() {
         let responseData = queryPoi200responseWithApps.data(using: .utf8)!
@@ -76,6 +97,22 @@ class PoiTests: XCTestCase {
             let response = try? result.get()
             XCTAssertEqual(response?.code, HttpStatusCode.ok)
             XCTAssertEqual(response?.object?.data.count, 0)
+        }
+    }
+    
+    func testGetAppById() {
+        let responseData = getAppsById200response.data(using: .utf8)!
+        MockHttpConnection.shared.desiredResult = .success(NetworkResponse(data: responseData, statusCode: HttpStatusCode.ok.rawValue))
+        
+        connection.request(.getLocationBasedApp(host: host, byId: "f106ac99-213c-4cf7-8c1b-1e841516026b"), expect: ApiRequest.GetLocationBasedAppResponse.self) { result in
+            let response = try? result.get()
+            XCTAssertEqual(response?.code, HttpStatusCode.ok)
+            
+            let app = response!.object!.data
+            
+            XCTAssertEqual(app.id, "f106ac99-213c-4cf7-8c1b-1e841516026b")
+            XCTAssertEqual(app.type, "locationBasedApp")
+            XCTAssertEqual(app.attributes?.appType, ApiRequest.AppType.fueling)
         }
     }
 }

@@ -36,6 +36,7 @@ class RequestsViewController: UIViewController, UITableViewDataSource, UITableVi
     var requests: [(category: String, requests: [DemoRequest])] = [
         ("Poi", [
             DemoRequest(title: "QueryLocationBasedApps", request: { $0.demoRequest(request: .queryLocationBasedApps(latitude: 48.7840031, longitude: 8.1943317), expect: ApiRequest.QueryLocationBasedAppsResponse.self) }),
+            DemoRequest(title: "GetLocationBasedAppById", request: { $0.demoRequest(request: .getLocationBasedApp(byId: "2a1319c3-c136-495d-b59a-47b3246d08af"), expect: ApiRequest.GetLocationBasedAppResponse.self) }),
         ]),
         ("Pay", [
             DemoRequest(title: "GetAllPaymentMethods", request: { $0.demoRequest(request: .getAllPaymentMethods(), expect: ApiRequest.GetAllPaymentMethodsResponse.self) }),

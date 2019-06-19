@@ -14,6 +14,7 @@ public extension ApiRequest {
     static let locationBasedAppType: String = "locationBasedApp"
 
     class QueryLocationBasedAppsResponse: DataArrayContainer<FuelingAttributes, Void, Void, FuelingMeta> {}
+    class GetLocationBasedAppResponse: DataContainer<FuelingAttributes, Void, Void, Void> {}
 
     struct FuelingAttributes: Codable {
         public let appType: AppType?
@@ -51,6 +52,19 @@ public extension ApiRequest {
                 URLQueryItem(name: "filter[appType]", value: appType.rawValue)
             ],
             body: nil, headers: nil, meta: nil
+        )
+    }
+    
+    static func getLocationBasedApp(host: String = Host.api.hostName,
+                                    byId id: String) -> ApiRequest {
+        return JsonApiRequest(
+            method: .get,
+            host: host,
+            path: "/poi/\(poiServiceVersion)/apps/\(id)",
+            queryItems: nil,
+            body: nil,
+            headers: nil,
+            meta: nil
         )
     }
 

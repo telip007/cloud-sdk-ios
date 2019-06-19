@@ -248,6 +248,11 @@ public class OAuthConnection {
 
         if !session.isValid {
             refreshSession(session)
+        } else {
+            delegate?.oAuthSessionCreated(refreshToken: session.refreshToken,
+                                          accessToken: session.accessToken,
+                                          scope: session.scope,
+                                          expirationDate: session.createdAt + session.expiresIn)
         }
     }
 
