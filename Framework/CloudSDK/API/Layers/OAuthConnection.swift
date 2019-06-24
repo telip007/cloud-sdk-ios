@@ -200,9 +200,8 @@ public class OAuthConnection {
                 if persistTokens {
                     let encoded = tokens.encode(with: JSONEncoder.shared)!
                     self.datastore.setData(encoded, forKey: self.datastore.OAuthSessionKey)
+                    self.sessionCreated(tokens)
                 }
-
-                self.sessionCreated(tokens)
 
                 handler(.success(tokens))
 
