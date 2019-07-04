@@ -12,6 +12,7 @@ public enum ApiError: Error {
     case invalidURL
     case requestFailed
     case unknownServerError
+    case forbidden
     case unknownHttpError(code: Int, message: String?)
     case httpError(code: Int, error: ApiErrorDetailsResponse?)
 
@@ -41,6 +42,9 @@ extension ApiError: LocalizedError {
 
         case .unknownServerError:
             return "Internal server error. Try again later."
+
+        case .forbidden:
+            return "Forbidden. Please make sure you are allowed to access the resource."
 
         case let .unknownHttpError(code, message):
             return "Unknown http error (code: \(code), message: \(message ?? "-")."

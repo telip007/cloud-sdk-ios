@@ -17,6 +17,7 @@ public enum HttpStatusCode: Int {
 
     case badRequest = 400
     case unauthorized = 401
+    case forbidden = 403
     case notFound = 404
 
     init?(from code: Int?) {

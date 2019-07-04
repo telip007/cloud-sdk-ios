@@ -47,6 +47,10 @@ public class OAuthConnection {
         return datastore.currentOAuthSession != nil
     }
 
+    public var scope: String? {
+        return datastore.currentOAuthSession?.scope
+    }
+
     public var accessToken: String? {
         return datastore.currentOAuthSession?.accessToken
     }
@@ -380,6 +384,8 @@ extension OAuthConnection: AuthorizationConnection {
                 if case let ApiError.httpError(code, _) = error, code == HttpStatusCode.unauthorized.rawValue && !request.bypassAuthentication {
                     self?.requestQueue.append(requestQueueItem)
                     self?.refreshSessionOrFail()
+                } else if case let ApiError.httpError(code, _) = error, code == HttpStatusCode.forbidden.rawValue {
+                    handler(.failure(ApiError.forbidden))
                 } else {
                     handler(.failure(error))
                 }
