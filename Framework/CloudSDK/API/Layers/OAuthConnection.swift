@@ -219,13 +219,18 @@ public class OAuthConnection {
         checkAndRefreshSession()
     }
 
-    public func reset() {
+    public func reset(completion: (() -> Void)? = nil) {
         revokeKey { [weak self] _ in
-            guard let self = self else { return }
+            guard let self = self else {
+                completion?()
+                return
+            }
 
             self.datastore.delete(self.datastore.OAuthSessionKey)
             self.authorizationBehavior.set(tokenData: nil)
             self.cleanupWebsiteData()
+
+            completion?()
         }
     }
 
