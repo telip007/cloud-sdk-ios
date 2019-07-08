@@ -1,4 +1,5 @@
 ### Current master
+* Add completion handler to reset method (#28)
 * Return session scope and try a refresh for scope mismatches (#27)
 * Do not trigger session created callback when session is not persisted (#26)
 * Migrate to Swift 5 (#18)
