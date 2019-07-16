@@ -39,15 +39,15 @@ public enum HttpStatusCode: Int {
         return 400 ..< 999
     }
 
-    var success: Bool {
+    public var success: Bool {
         return successRange.contains(self.rawValue)
     }
 
-    var redirect: Bool {
+    public var redirect: Bool {
         return redirectRange.contains(self.rawValue)
     }
 
-    var error: Bool {
+    public var error: Bool {
         return errorRange.contains(self.rawValue)
     }
 }

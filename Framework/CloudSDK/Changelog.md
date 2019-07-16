@@ -7,3 +7,4 @@
 - Implement first iteration (#1)
 - Prepare for first release (#2)
 - Split urls (#4)
+- Make success, redirect and error values public in HttpStatusCode enum (#31)
