@@ -8,3 +8,4 @@
 - Prepare for first release (#2)
 - Split urls (#4)
 - Make success, redirect and error values public in HttpStatusCode enum (#31)
+- Refactor ApiErrorDetailsResponse and ErrorObject (#32)
