@@ -9,7 +9,7 @@
 import Foundation
 
 public struct ApiErrorDetailsResponse: Codable, CustomStringConvertible {
-    let errors: [ErrorObject]
+    public let errors: [ErrorObject]
 
     public var description: String {
         return "\(errors)"
@@ -20,7 +20,7 @@ public struct ErrorObject: Codable, CustomStringConvertible {
     let id: String?
     let links: ErrorLink?
     let status: String?
-    let code: String?
+    public let code: String?
     let title: String?
     let detail: String?
     let source: ErrorSource?
