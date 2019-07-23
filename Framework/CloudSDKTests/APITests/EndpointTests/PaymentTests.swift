@@ -102,6 +102,10 @@ class PaymentTests: XCTestCase {
                         {
                           "type": "paymentToken",
                           "id": "33331f72-a672-453c-9d36-d5809ef0ded6"
+                        },
+                        {
+                          "type": "paymentToken",
+                          "id": "c91ee07e-ad43-11e9-a2a3-2a2ae2dbcce4"
                         }
                       ]
                     }
@@ -121,6 +125,19 @@ class PaymentTests: XCTestCase {
                       "prn:poi:gas-stations:124e522d-65ef-4386-b7e0-00d2eceeadc6"
                     ]
                   }
+                },
+                {
+                  "type": "paymentToken",
+                  "id": "c91ee07e-ad43-11e9-a2a3-2a2ae2dbcce4",
+                  "attributes": {
+                    "amount": 23,
+                    "currency": "EUR",
+                    "value": "1337432123412",
+                    "validUntil": "2019-06-07T11:20:32Z",
+                    "purposePRNs": [
+                      "prn:poi:gas-stations:124e522d-65ef-4386-b7e0-00d2eceeadc6"
+                    ]
+                  }
                 }
               ]
             }
@@ -132,8 +149,10 @@ class PaymentTests: XCTestCase {
             let responseData = response?.object
 
             XCTAssertEqual(1, responseData?.paymentTokensMethodMapping.count)
+            XCTAssertEqual(2, responseData?.paymentTokensMethodMapping["d7101f72-a672-453c-9d36-d5809ef0ded6"]?.count)
             XCTAssertEqual("d7101f72-a672-453c-9d36-d5809ef0ded6", responseData?.paymentTokensMethodMapping.first?.key)
-            XCTAssertEqual("12c52345c1x34", responseData?.paymentTokensMethodMapping["d7101f72-a672-453c-9d36-d5809ef0ded6"]?.value)
+            XCTAssertEqual("12c52345c1x34", responseData?.paymentTokensMethodMapping["d7101f72-a672-453c-9d36-d5809ef0ded6"]?.first?.value)
+            XCTAssertEqual("1337432123412", responseData?.paymentTokensMethodMapping["d7101f72-a672-453c-9d36-d5809ef0ded6"]?.last?.value)
         }
     }
 }
