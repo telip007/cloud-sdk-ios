@@ -10,13 +10,23 @@ import Foundation
 
 extension ApiRequest.GetAllPaymentMethodsWithPreAuthorizedResponse {
     // TODO: This is only a workaround until a proper jsonapi decoding is done
-    public var paymentTokensMethodMapping: [String: ApiRequest.PaymentTokenAttributes] {
-        return included?.reduce(into: [String: ApiRequest.PaymentTokenAttributes]()) { (dict, i) in
-                if let key = data.first(where: { d in
-                    d.relationships?.paymentTokens?.data.contains(where: { r in r.id == i.id }) ?? false
-                })?.id {
-                    dict[key] = i.attributes
-                }
-            } ?? [:]
+    public var paymentTokensMethodMapping: [String: [ApiRequest.PaymentTokenAttributes]] {
+        var result: [String: [ApiRequest.PaymentTokenAttributes]] = [:]
+
+        for entry in data {
+            var paymentTokens: [ApiRequest.PaymentTokenAttributes] = []
+
+            guard let tokens = entry.relationships?.paymentTokens?.data else { continue }
+
+            for token in tokens {
+                guard let paymentToken = included?.first(where: { $0.id == token.id })?.attributes else { continue }
+
+                paymentTokens.append(paymentToken)
+            }
+
+            result[entry.id] = paymentTokens
+        }
+
+        return result
     }
 }
