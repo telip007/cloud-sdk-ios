@@ -17,5 +17,6 @@ class SystemLogger: Logger {
         } else {
             NSLog("[\(tag)] \(message)")
         }
+        // print("Test commit")
     }
 }
