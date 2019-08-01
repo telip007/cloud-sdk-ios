@@ -45,6 +45,8 @@ class RequestsViewController: UIViewController, UITableViewDataSource, UITableVi
             DemoRequest(title: "RegisterSepaDirectMethod", request: { $0.demoRequest(request: .registerSepaDirectMethod(body: DemoObjects.registerSepaDirectMethod), expect: ApiRequest.RegisterSepaDirectMethodResponse.self) }),
             DemoRequest(title: "DeletePaymentMethod", request: { $0.demoRequest(request: .deletePaymentMethod(paymentMethodId: DemoObjects.registerSepaDirectMethod.data.id), expect: ApiRequest.QueryLocationBasedAppsResponse.self) }),
         ])
+
+        // test again
     ]
 
     override func viewDidLoad() {
