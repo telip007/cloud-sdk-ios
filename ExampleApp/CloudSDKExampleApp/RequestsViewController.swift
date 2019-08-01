@@ -46,7 +46,7 @@ class RequestsViewController: UIViewController, UITableViewDataSource, UITableVi
             DemoRequest(title: "DeletePaymentMethod", request: { $0.demoRequest(request: .deletePaymentMethod(paymentMethodId: DemoObjects.registerSepaDirectMethod.data.id), expect: ApiRequest.QueryLocationBasedAppsResponse.self) }),
         ])
 
-        // test again
+        // test again 2
     ]
 
     override func viewDidLoad() {
